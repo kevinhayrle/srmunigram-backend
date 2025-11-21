@@ -9,7 +9,7 @@ console.log('👋 Unigram app.js started');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000', // frontend URL
+  origin: 'https://srm-unigram-backend.onrender.com', // frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true // if you need to send cookies
 }));
