@@ -2,8 +2,6 @@ const mailjet = require('node-mailjet');
 require('dotenv').config();
 
 // --- Mailjet Client Setup (Resilient Initialization) ---
-// Using the explicit .apiConnect method to prevent module resolution errors
-// in deployment environments (a fix we've already implemented successfully).
 const mailjetClient = mailjet.apiConnect(
   process.env.MJ_API_KEY,
   process.env.MJ_API_SECRET
@@ -11,12 +9,9 @@ const mailjetClient = mailjet.apiConnect(
 
 /**
  * Sends a 6-digit OTP via email using Mailjet.
- * * NOTE: This function maintains the original signature and name (sendOTPEmail)
- * for seamless replacement of the Nodemailer logic.
- * * @param {string} email - The recipient's email address.
+ * @param {string} email - The recipient's email address.
  * @param {string} otp - The 6-digit OTP string.
  * @param {string} [name=''] - The recipient's name (optional).
- * @returns {Promise<boolean>} Resolves to true on success, rejects on failure.
  */
 function sendOTPEmail(email, otp, name = '') {
   console.log('📧 Sending OTP via Mailjet to:', email);
@@ -50,7 +45,6 @@ function sendOTPEmail(email, otp, name = '') {
   return mailjetClient.post('send', { version: 'v3.1' }).request({
     Messages: [
       {
-        // Change the 'From' email to your verified Mailjet sender email
         From: { Email: process.env.MJ_SENDER_EMAIL, Name: 'Unigram' },
         To: [{ Email: email }],
         Subject: subject,
@@ -59,16 +53,30 @@ function sendOTPEmail(email, otp, name = '') {
     ]
   })
   .then(result => {
+      // --- DEBUGGING LOG ADDED ---
       const status = result.body?.Messages?.[0]?.Status;
+      console.log('✅ Mailjet Response Status:', status);
+      console.log('--- Full Mailjet Body (for success/queued) ---');
+      console.log(JSON.stringify(result.body, null, 2)); 
+      // ---------------------------
+
       if (status !== 'success' && status !== 'queued') {
-          console.error('❌ Mailjet rejected OTP:', result.body?.Messages?.[0]?.Errors);
+          console.error('❌ Mailjet Rejected Email - Details:', result.body?.Messages?.[0]?.Errors);
           throw new Error(`Mailjet sending failed with status: ${status}`);
       }
       console.log('✅ OTP email sent via Mailjet:', status);
       return true; 
   })
   .catch(err => {
-      console.error('❌ OTP email failed via Mailjet:', err.statusCode, err.message);
+      // --- DEBUGGING LOG ADDED FOR ERRORS ---
+      console.error('❌ FATAL MAILJET FAILURE (Connection/Auth):');
+      console.error('Status Code:', err.statusCode); 
+      console.error('Message:', err.message);
+      // If the error object has a body, log it too:
+      if (err.response && err.response.body) {
+        console.error('Response Body:', JSON.stringify(err.response.body, null, 2));
+      }
+      // ----------------------------------------
       throw err; 
   });
 }
