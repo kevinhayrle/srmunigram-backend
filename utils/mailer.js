@@ -22,16 +22,16 @@ function sendOTPEmail(email, otp, name = '') {
 
   const greeting = name ? `<p>Hello ${name},</p>` : `<p>Hello,</p>`;
 
-  const subject = 'Your Unigram OTP';
+  const subject = 'OTP';
 
   const htmlContent = `
-    <div style="font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; border: 1px solid #004d40; border-radius: 8px; text-align: center;">
-      <h2 style="color: #004d40;">Unigram OTP Request</h2>
+    <div style="font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; border: 1px solid #0095f6; border-radius: 8px; text-align: center;">
+      <h2 style="color: #0095f6;">Unigram OTP Request</h2>
       ${greeting}
       <p style="font-size: 16px;">${purposeText}</p>
       
       <div style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; margin: 20px 0;">
-        <h1 style="color: #d84315; font-size: 32px; letter-spacing: 5px; margin: 0;">${otp}</h1>
+        <h1 style="color: #0095f6; font-size: 32px; letter-spacing: 5px; margin: 0;">${otp}</h1>
       </div>
       
       <p style="font-size: 14px; color: #777;">This OTP is valid for 10 minutes.</p>
@@ -45,7 +45,7 @@ function sendOTPEmail(email, otp, name = '') {
   return mailjetClient.post('send', { version: 'v3.1' }).request({
     Messages: [
       {
-        From: { Email: process.env.MJ_SENDER_EMAIL, Name: 'Unigram' },
+        From: { Email: process.env.MJ_SENDER_EMAIL, Name: 'SRM Unigram' },
         To: [{ Email: email }],
         Subject: subject,
         HTMLPart: htmlContent
