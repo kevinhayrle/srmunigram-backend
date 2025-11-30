@@ -42,15 +42,6 @@ exports.signupUser = async (req, res) => {
 
     await pendingUser.save();
 
-    // ---------------- DEV OTP OVERRIDE ----------------
-    // For local development only, force OTP to known value
-    if (process.env.NODE_ENV !== 'production' && process.env.ALLOW_DEV_OTP === 'true') {
-      pendingUser.otp = process.env.DEV_TEST_OTP || "123";
-      await pendingUser.save();
-      console.log(`[DEV] OTP for ${email} set to ${pendingUser.otp}`);
-    }
-    // ---------------- END DEV OTP OVERRIDE ----------------
-
     // Send OTP email (optional, can still send real OTP or skip)
     await sendOTPEmail(email, pendingUser.otp, name);
 
