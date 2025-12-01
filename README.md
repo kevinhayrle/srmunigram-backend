@@ -72,19 +72,14 @@ The backend handles:
 
 ---
 
-## Deployment
-- Backend is deployed on **Render**  
-- Push changes → manually trigger a deployment from the Render dashboard  
+## Developer
+**Kevin Antony**  
+*Full-stack Developer & Creator of SRM Unigram*   
 
 ---
 
-## 👨‍💻 Developer
-**Kevin Antony** — Full-stack Developer & Creator of SRM Unigram  
-
----
-
-## 📜 License
-Backend code © 2025 **Kevin Antony**  
+## License
+Frontend code © 2025 **Kevin Antony**  
 All rights reserved. Redistribution or replication is not permitted without written consent.  
 
-The SRM logo is the property of **SRM Institute of Science and Technology** and is used under permission for official purposes only.
+The **SRM logo** is the property of **SRM Institute of Science and Technology** and is used under permission for official purposes only.
